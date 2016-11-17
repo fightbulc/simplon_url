@@ -1,0 +1,30 @@
+{
+  "name": "simplon/url",
+  "description": "Simple URL",
+  "homepage": "https://github.com/fightbulc/simplon_url",
+  "type": "library",
+  "keywords": [
+    "url",
+    "parse",
+    "build",
+    "manipulation",
+    "create"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tino Ehrich",
+      "email": "tino@bigpun.me",
+      "role": "developer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Simplon\\Url\\": "src/"
+    }
+  }
+}
