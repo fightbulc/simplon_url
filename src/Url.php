@@ -17,6 +17,16 @@ class Url
     private $elements;
 
     /**
+     * @return string
+     */
+    public static function getCurrentUrl(): string
+    {
+        $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+        return $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    }
+
+    /**
      * @param string $url
      */
     public function __construct(string $url = null)

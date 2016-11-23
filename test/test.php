@@ -8,6 +8,10 @@ $url = new Url('http://foobar.com/en/test/challenge?utm_source=source&utm_campai
 $url = new Url('ftp://peter:sunny@foobar.com:21');
 
 var_dump(
+    Url::getCurrentUrl()
+);
+
+var_dump(
     $url
         ->getPort()
 );
