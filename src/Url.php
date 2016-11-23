@@ -178,7 +178,7 @@ class Url
 
         if ($path = $this->getPath())
         {
-            $url[] = '/' . $path;
+            $url[] = '/' . trim($path, '/');
         }
 
         if ($params = $this->getAllQueryParams())
