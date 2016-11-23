@@ -31,7 +31,11 @@ class Url
      */
     public function __construct(string $url = null)
     {
-        $this->url = $url;
+        if ($url)
+        {
+            $this->url = $url;
+            $this->parse();
+        }
     }
 
     /**
