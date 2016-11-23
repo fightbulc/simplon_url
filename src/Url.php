@@ -301,6 +301,24 @@ class Url
     }
 
     /**
+     * @param string $value
+     *
+     * @return Url
+     */
+    public function withFragment(string $value): self
+    {
+        return $this->setElement('fragment', trim($value, '/'));
+    }
+
+    /**
+     * @return Url
+     */
+    public function withoutAllQueryParams(): self
+    {
+        return $this->setElement('query', '');
+    }
+
+    /**
      * @param string $key
      *
      * @return Url
@@ -315,16 +333,6 @@ class Url
         }
 
         return $this->setElement('query', http_build_query($params));
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return Url
-     */
-    public function withFragment(string $value): self
-    {
-        return $this->setElement('fragment', trim($value, '/'));
     }
 
     /**
