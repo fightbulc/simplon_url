@@ -331,7 +331,7 @@ class Url
     {
         $params = $this->getAllQueryParams();
 
-        if (!empty($params[$key]))
+        if (isset($params[$key]))
         {
             unset($params[$key]);
         }
