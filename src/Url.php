@@ -108,12 +108,7 @@ class Url
                 $segment = 1;
             }
 
-            if ($segment > $pathSegementsCount)
-            {
-                $segment = $pathSegementsCount;
-            }
-
-            if (!empty($pathSegments[$segment - 1]))
+            if ($segment <= $pathSegementsCount && !empty($pathSegments[$segment - 1]))
             {
                 return $pathSegments[$segment - 1];
             }
