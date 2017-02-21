@@ -1,8 +1,8 @@
 <?php
+
 namespace Simplon\Url;
 
 /**
- * Class Url
  * @package Simplon\Url
  */
 class Url
@@ -167,8 +167,11 @@ class Url
             $url[] = $this->getUser() . ':' . $this->getPass() . '@';
         }
 
-        $url[] = $this->getScheme() . '://';
-        $url[] = $this->getHost();
+        if ($host = $this->getHost())
+        {
+            $url[] = $this->getScheme() . '://';
+            $url[] = $this->getHost();
+        }
 
         if ($port = $this->getPort())
         {
@@ -251,7 +254,7 @@ class Url
      */
     public function withPath(string $value): self
     {
-        return $this->setElement('path', trim($value, '/'));
+        return $this->setElement('path', rtrim($value, '/'));
     }
 
     /**
@@ -267,7 +270,7 @@ class Url
 
         if ($path = $this->getPath())
         {
-            $pathSegments = explode('/', trim($this->getPath(), '/'));
+            $pathSegments = explode('/', rtrim($this->getPath(), '/'));
             $pathSegementsCount = count($pathSegments);
 
             if ($segment <= 0)
@@ -312,6 +315,30 @@ class Url
     /**
      * @return Url
      */
+    public function withoutHost(): self
+    {
+        return $this->setElement('host', '');
+    }
+
+    /**
+     * @return Url
+     */
+    public function withoutPath(): self
+    {
+        return $this->setElement('path', '');
+    }
+
+    /**
+     * @return Url
+     */
+    public function withoutFragment(): self
+    {
+        return $this->setElement('fragment', '');
+    }
+
+    /**
+     * @return Url
+     */
     public function withoutAllQueryParams(): self
     {
         return $this->setElement('query', '');
@@ -332,14 +359,6 @@ class Url
         }
 
         return $this->setElement('query', http_build_query($params));
-    }
-
-    /**
-     * @return Url
-     */
-    public function withoutFragment(): self
-    {
-        return $this->setElement('fragment', '');
     }
 
     /**
