@@ -303,6 +303,21 @@ class Url
     }
 
     /**
+     * @param array $params
+     *
+     * @return Url
+     */
+    public function withQueryParams(array $params): self
+    {
+        foreach ($params as $key => $value)
+        {
+            $this->withQueryParam($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string $value
      *
      * @return Url
