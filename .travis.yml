@@ -1,0 +1,22 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+
+matrix:
+  allow_failures:
+    - php: hhvm
+
+before_install:
+  - composer self-update
+
+install:
+  - travis_retry composer install --no-interaction --prefer-source
+
+script:
+  - phpunit -c phpunit.xml
+
+notifications:
+    on_success: never
+    on_failure: always
