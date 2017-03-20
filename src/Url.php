@@ -41,7 +41,7 @@ class Url
     /**
      * @return string
      */
-    public function getScheme()
+    public function getProtocol()
     {
         if ($scheme = $this->getParsedElements('scheme'))
         {
@@ -57,6 +57,54 @@ class Url
     public function getHost()
     {
         return $this->getParsedElements('host');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSubDomain()
+    {
+        $parts = $this->getHostParts();
+
+        if ($parts)
+        {
+            array_pop($parts);
+            array_pop($parts);
+
+            return implode('.', $parts);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDomain()
+    {
+        $parts = $this->getHostParts();
+
+        if ($parts)
+        {
+            return array_slice($parts, -2, 1)[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTldDomain()
+    {
+        $parts = $this->getHostParts();
+
+        if ($parts)
+        {
+            return array_slice($parts, -1, 1)[0];
+        }
+
+        return null;
     }
 
     /**
@@ -169,7 +217,7 @@ class Url
 
         if ($host = $this->getHost())
         {
-            $url[] = $this->getScheme() . '://';
+            $url[] = $this->getProtocol() . '://';
             $url[] = $this->getHost();
         }
 
@@ -202,7 +250,7 @@ class Url
      *
      * @return Url
      */
-    public function withScheme(string $value): self
+    public function withProtocol(string $value): self
     {
         return $this->setElement('scheme', $value);
     }
@@ -215,6 +263,47 @@ class Url
     public function withHost(string $value): self
     {
         return $this->setElement('host', $value);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return Url
+     */
+    public function withSubDomain(string $value): self
+    {
+        $host = $value . '.' . $this->getHost();
+
+        if ($subDomain = $this->getSubDomain())
+        {
+            $host = str_replace($this->getSubDomain(), $value, $this->getHost());
+        }
+
+        return $this->setElement('host', $host);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return Url
+     */
+    public function withDomain(string $value): self
+    {
+        $host = str_replace($this->getDomain(), $value, $this->getHost());
+
+        return $this->setElement('host', $host);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return Url
+     */
+    public function withTldDomain(string $value): self
+    {
+        $host = str_replace($this->getTldDomain(), $value, $this->getHost());
+
+        return $this->setElement('host', $host);
     }
 
     /**
@@ -338,6 +427,16 @@ class Url
     /**
      * @return Url
      */
+    public function withoutSubDomain(): self
+    {
+        $host = str_replace($this->getSubDomain() . '.', '', $this->getHost());
+
+        return $this->setElement('host', $host);
+    }
+
+    /**
+     * @return Url
+     */
     public function withoutPath(): self
     {
         return $this->setElement('path', '');
@@ -387,6 +486,19 @@ class Url
         $this->elements[$key] = $value;
 
         return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getHostParts()
+    {
+        if ($this->getHost())
+        {
+            return explode('.', $this->getHost());
+        }
+
+        return null;
     }
 
     /**
