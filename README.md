@@ -25,11 +25,14 @@ Parse URLs is as simple as the following example:
 
 ```php
 $url = new Url(
-    'http://foobar.com/en/test/challenge?utm_source=source&utm_campaign=campaign&utm_medium=medium#hello-world'
+    'http://foo.bar.com/en/test/challenge?utm_source=source&utm_campaign=campaign&utm_medium=medium#hello-world'
 );
 
-$url->getScheme(); // http
-$url->getHost(); // foobar.com
+$url->getProtocol(); // http
+$url->getHost(); // foo.bar.com
+$url->getSubDomain(); // foo
+$url->getDomain(); // bar
+$url->getTopLevelDomain(); // com
 $url->getPath(); // /en/test/challenge
 $url->getAllQueryParams(); // ['utm_source' => 'source', ...]
 $url->getQueryParam('utm_source'); // source
@@ -60,7 +63,7 @@ You can build a URL from scratch or manipulate from an existing one.
 
 ```php
 $url = (new Url())
-    ->withScheme('https')
+    ->withProtocol('https')
     ->withHost('dear-johnny.io')
     ->withPath('/foo/bar')
     ->withQueryParam('sun', 'is-shining')
@@ -74,16 +77,18 @@ echo $url; // https://dear-johnny.io/foo/bar?sun=is-shining&training=yes#hello-w
 
 ```php
 $url = new Url(
-    'https://dear-johnny.io/foo/bar?sun=is-shining&training=yes#hello-world'
+    'https://us.dear-johnny.io/foo/bar?sun=is-shining&training=yes#hello-world'
 );
 
 $url
+    ->withoutSubDomain()
+    ->withTopLevelDomain('com')
     ->withPathSegment(1, 'hoo')
     ->withoutQueryParam('training')
     ->withQueryParam('sun', 'off')
     ->withoutFragment();
 
-echo $url; // https://dear-johnny.io/hoo/bar?sun=off
+echo $url; // https://dear-johnny.com/hoo/bar?sun=off
 ```
 
 -------------------------------------------------

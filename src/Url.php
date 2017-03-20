@@ -95,7 +95,7 @@ class Url
     /**
      * @return string|null
      */
-    public function getTldDomain()
+    public function getTopLevelDomain()
     {
         $parts = $this->getHostParts();
 
@@ -299,9 +299,9 @@ class Url
      *
      * @return Url
      */
-    public function withTldDomain(string $value): self
+    public function withTopLevelDomain(string $value): self
     {
-        $host = str_replace($this->getTldDomain(), $value, $this->getHost());
+        $host = str_replace($this->getTopLevelDomain(), $value, $this->getHost());
 
         return $this->setElement('host', $host);
     }
