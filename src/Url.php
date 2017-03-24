@@ -429,7 +429,12 @@ class Url
      */
     public function withoutSubDomain(): self
     {
-        $host = str_replace($this->getSubDomain() . '.', '', $this->getHost());
+        $host = $this->getHost();
+
+        if ($this->getSubDomain())
+        {
+            $host = str_replace($this->getSubDomain() . '.', '', $host);
+        }
 
         return $this->setElement('host', $host);
     }
