@@ -347,6 +347,30 @@ class Url
     }
 
     /**
+     * @param string $value
+     *
+     * @return Url
+     */
+    public function withPrefixPath(string $value): self
+    {
+        $path = rtrim($value, '/') . '/' . trim($this->getPath(), '/');
+
+        return $this->setElement('path', $path);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return Url
+     */
+    public function withTrailPath(string $value): self
+    {
+        $path = rtrim($this->getPath(), '/') . '/' . trim($value, '/');
+
+        return $this->setElement('path', $path);
+    }
+
+    /**
      * @param int $segment
      * @param string $value
      *

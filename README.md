@@ -84,11 +84,13 @@ $url
     ->withoutSubDomain()
     ->withTopLevelDomain('com')
     ->withPathSegment(1, 'hoo')
+    ->withPrefixPath('/en')
+    ->withTrailPath('/much/more')
     ->withoutQueryParam('training')
     ->withQueryParam('sun', 'off')
     ->withoutFragment();
 
-echo $url; // https://dear-johnny.com/hoo/bar?sun=off
+echo $url; // https://dear-johnny.com/en/hoo/bar/much/more?sun=off
 ```
 
 -------------------------------------------------
@@ -97,7 +99,7 @@ echo $url; // https://dear-johnny.com/hoo/bar?sun=off
 
 Simplon Url is freely distributable under the terms of the MIT license.
 
-Copyright (c) 2016 Tino Ehrich ([tino@bigpun.me](mailto:tino@bigpun.me))
+Copyright (c) 2017 Tino Ehrich ([tino@bigpun.me](mailto:tino@bigpun.me))
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
