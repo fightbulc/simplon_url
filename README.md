@@ -15,7 +15,7 @@ Straight forward URL parser and builder.
 
 # Requirements
 
-- PHP7.0+
+- PHP7.1+
 
 # Parsing
 
@@ -91,6 +91,39 @@ $url
     ->withoutFragment();
 
 echo $url; // https://dear-johnny.com/en/hoo/bar/much/more?sun=off
+```
+
+### Working with path placeholders
+
+Path placeholders work for the following path manipulations. Placeholders are optional and work as following:
+
+```php
+//
+// withPath
+//
+
+$route = '/say/{message}';
+$url = new Url('https://foobar.io');
+$url->withPath($route, ['message' => 'hello']);
+echo $url; // https://foobar.io/say/hello
+
+//
+// withPrefixPath
+//
+
+$route = '/hello/{message}';
+$url = new Url('https://foobar.io/bob');
+$url->withPrefixPath($route, ['message' => 'there']);
+echo $url; // https://foobar.io/hello/there/bob
+
+//
+// withTrailPath
+//
+
+$route = '/got/{count}/{item}';
+$url = new Url('https://foobar.io/bob');
+$url->withTrailPath($route, ['count' => 'five', 'item' => 'cars']);
+echo $url; // https://foobar.io/bob/got/five/cars 
 ```
 
 -------------------------------------------------

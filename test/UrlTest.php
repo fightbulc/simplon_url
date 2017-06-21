@@ -36,7 +36,7 @@ class UrlTest extends TestCase
         $this->assertEquals('de', $url->getPathSegment(1));
         $this->assertEquals('foo', $url->getPathSegment(2));
         $this->assertEquals('bar', $url->getPathSegment(3));
-        $this->assertArrayNotHasKey('token', $url->getAllQueryParams());
+        $this->assertEmpty($url->getAllQueryParams());
     }
 
     public function testUserPass()
@@ -86,20 +86,41 @@ class UrlTest extends TestCase
         $this->assertEquals('foobar.com', $url->getHost());
     }
 
+    public function testEmptyPath()
+    {
+        $url = new Url('http://lalala.foobar.com');
+        $this->assertEquals('/', $url->getPath());
+    }
+
     public function testPathWithPlaceholders()
     {
         $url = new Url('http://lalala.foobar.com');
         $url->withPath('hello/{name}', ['name' => 'peter']);
-        $this->assertEquals('hello/peter', $url->getPath());
+        $this->assertEquals('/hello/peter', $url->getPath());
 
         $url->withPrefixPath('say');
-        $this->assertEquals('say/hello/peter', $url->getPath());
+        $this->assertEquals('/say/hello/peter', $url->getPath());
     }
 
     public function testPrefixPath()
     {
         $url = new Url('http://lalala.foobar.com/hello');
         $url->withPrefixPath('say');
-        $this->assertEquals('say/hello', $url->getPath());
+        $this->assertEquals('/say/hello', $url->getPath());
+        $url->withoutPath();
+
+        $url->withPrefixPath('say/{message}', ['message' => 'howdy']);
+        $this->assertEquals('/say/howdy', $url->getPath());
+    }
+
+    public function testTrailingPath()
+    {
+        $url = new Url('http://lalala.foobar.com/hello');
+        $url->withTrailPath('there');
+        $this->assertEquals('/hello/there', $url->getPath());
+        $url->withoutPath();
+
+        $url->withTrailPath('hello/{message}', ['message' => 'everybody']);
+        $this->assertEquals('/hello/everybody', $url->getPath());
     }
 }
