@@ -338,34 +338,54 @@ class Url
 
     /**
      * @param string $value
+     * @param array|null $params
      *
      * @return Url
      */
-    public function withPath(string $value): self
+    public function withPath(string $value, ?array $params = null): self
     {
-        return $this->setElement('path', rtrim($value, '/'));
-    }
+        $path = rtrim($value, '/');
 
-    /**
-     * @param string $value
-     *
-     * @return Url
-     */
-    public function withPrefixPath(string $value): self
-    {
-        $path = rtrim($value, '/') . '/' . trim($this->getPath(), '/');
+        if ($params)
+        {
+            $path = $this->replacePlaceholders($path, $params);
+        }
 
         return $this->setElement('path', $path);
     }
 
     /**
      * @param string $value
+     * @param array|null $params
      *
      * @return Url
      */
-    public function withTrailPath(string $value): self
+    public function withPrefixPath(string $value, ?array $params = null): self
+    {
+        $path = rtrim($value, '/') . '/' . trim($this->getPath(), '/');
+
+        if ($params)
+        {
+            $path = $this->replacePlaceholders($path, $params);
+        }
+
+        return $this->setElement('path', $path);
+    }
+
+    /**
+     * @param string $value
+     * @param array|null $params
+     *
+     * @return Url
+     */
+    public function withTrailPath(string $value, ?array $params = null): self
     {
         $path = rtrim($this->getPath(), '/') . '/' . trim($value, '/');
+
+        if ($params)
+        {
+            $path = $this->replacePlaceholders($path, $params);
+        }
 
         return $this->setElement('path', $path);
     }
@@ -502,6 +522,22 @@ class Url
         }
 
         return $this->setElement('query', http_build_query($params));
+    }
+
+    /**
+     * @param string $uri
+     * @param array $params
+     *
+     * @return string
+     */
+    private function replacePlaceholders(string $uri, array $params = []): string
+    {
+        foreach ($params as $key => $val)
+        {
+            $uri = str_replace('{' . $key . '}', $val, $uri);
+        }
+
+        return $uri;
     }
 
     /**

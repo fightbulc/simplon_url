@@ -85,4 +85,21 @@ class UrlTest extends TestCase
         $url->withoutSubDomain();
         $this->assertEquals('foobar.com', $url->getHost());
     }
+
+    public function testPathWithPlaceholders()
+    {
+        $url = new Url('http://lalala.foobar.com');
+        $url->withPath('hello/{name}', ['name' => 'peter']);
+        $this->assertEquals('hello/peter', $url->getPath());
+
+        $url->withPrefixPath('say');
+        $this->assertEquals('say/hello/peter', $url->getPath());
+    }
+
+    public function testPrefixPath()
+    {
+        $url = new Url('http://lalala.foobar.com/hello');
+        $url->withPrefixPath('say');
+        $this->assertEquals('say/hello', $url->getPath());
+    }
 }
