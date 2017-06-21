@@ -123,4 +123,19 @@ class UrlTest extends TestCase
         $url->withTrailPath('hello/{message}', ['message' => 'everybody']);
         $this->assertEquals('/hello/everybody', $url->getPath());
     }
+
+    public function testQueryParams()
+    {
+        $url = new Url('http://lalala.foobar.com/?foo=bar&product=water');
+        $this->assertArrayHasKey('product', $url->getAllQueryParams());
+        $this->assertEquals('water', $url->getQueryParam('product'));
+
+        $url = new Url('http://lalala.foobar.com');
+        $this->assertEquals(null, $url->getAllQueryParams());
+        $this->assertEquals(null, $url->getQueryParam('foo'));
+
+        $url = new Url('http://lalala.foobar.com');
+        $url->withQueryParam('foo', 'bar');
+        $this->assertEquals('bar', $url->getQueryParam('foo'));
+    }
 }

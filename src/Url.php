@@ -432,7 +432,8 @@ class Url
      */
     public function withQueryParam(string $key, $value): self
     {
-        $params = array_replace_recursive($this->getAllQueryParams(), [$key => $value]);
+        $params = $this->getAllQueryParams() ?? [];
+        $params = array_replace_recursive($params, [$key => $value]);
 
         return $this->setElement('query', http_build_query($params));
     }
@@ -516,14 +517,15 @@ class Url
      */
     public function withoutQueryParam(string $key): self
     {
-        $params = $this->getAllQueryParams();
-
-        if (isset($params[$key]))
+        if ($params = $this->getAllQueryParams())
         {
-            unset($params[$key]);
-        }
+            if (isset($params[$key]))
+            {
+                unset($params[$key]);
+            }
 
-        return $this->setElement('query', http_build_query($params));
+            return $this->setElement('query', http_build_query($params));
+        }
     }
 
     /**
