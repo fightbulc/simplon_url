@@ -138,4 +138,12 @@ class UrlTest extends TestCase
         $url->withQueryParam('foo', 'bar');
         $this->assertEquals('bar', $url->getQueryParam('foo'));
     }
+
+    public function testProtocol()
+    {
+        $url = new Url('//lalala.foobar.com');
+        $this->assertEquals('//lalala.foobar.com', $url->__toString());
+        $this->assertNull($url->getProtocol());
+        $this->assertEquals('lalala.foobar.com', $url->getHost());
+    }
 }

@@ -219,8 +219,12 @@ class Url
 
         if ($host = $this->getHost())
         {
-            $url[] = $this->getProtocol() . '://';
-            $url[] = $this->getHost();
+            if ($this->getProtocol())
+            {
+                $url[] = $this->getProtocol() . ':';
+            }
+
+            $url[] = '//' . $this->getHost();
         }
 
         if ($port = $this->getPort())
@@ -230,7 +234,12 @@ class Url
 
         if ($path = $this->getPath())
         {
-            $url[] = '/' . trim($path, '/');
+            $path = trim($path, '/');
+
+            if ($path)
+            {
+                $url[] = '/' . $path;
+            }
         }
 
         if ($params = $this->getAllQueryParams())
