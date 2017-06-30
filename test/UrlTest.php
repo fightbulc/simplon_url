@@ -146,4 +146,16 @@ class UrlTest extends TestCase
         $this->assertNull($url->getProtocol());
         $this->assertEquals('lalala.foobar.com', $url->getHost());
     }
+
+    public function testSettingHost()
+    {
+        $url = (new Url())->withHost('http://foo.com');
+        $this->assertEquals('http://foo.com', $url->__toString());
+        $this->assertEquals('http', $url->getProtocol());
+        $this->assertEquals('foo.com', $url->getHost());
+
+        $url = (new Url())->withHost('foo.com');
+        $this->assertEquals('//foo.com', $url->__toString());
+        $this->assertEquals('foo.com', $url->getHost());
+    }
 }

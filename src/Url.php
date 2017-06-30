@@ -273,6 +273,12 @@ class Url
      */
     public function withHost(string $value): self
     {
+        if (strpos($value, '://'))
+        {
+            list($protocol, $value) = explode('://', $value);
+            $this->withProtocol($protocol);
+        }
+
         return $this->setElement('host', $value);
     }
 
