@@ -535,6 +535,8 @@ class Url
 
             return $this->setElement('query', http_build_query($params));
         }
+
+        return $this;
     }
 
     /**
