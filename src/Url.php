@@ -236,7 +236,7 @@ class Url
         {
             $path = trim($path, '/');
 
-            if ($path)
+            if ($this->getHost() === null || $path)
             {
                 $url[] = '/' . $path;
             }

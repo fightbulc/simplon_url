@@ -122,6 +122,10 @@ class UrlTest extends TestCase
 
         $url->withTrailPath('hello/{message}', ['message' => 'everybody']);
         $this->assertEquals('/hello/everybody', $url->getPath());
+
+        $url = new Url('/');
+        $this->assertEquals('/', $url->getPath());
+        $this->assertEquals('/', $url->__toString());
     }
 
     public function testQueryParams()
@@ -149,10 +153,10 @@ class UrlTest extends TestCase
 
     public function testSettingHost()
     {
-        $url = (new Url())->withHost('http://foo.com');
-        $this->assertEquals('http://foo.com', $url->__toString());
+        $url = (new Url())->withHost('http://foo2.com');
+        $this->assertEquals('http://foo2.com', $url->__toString());
         $this->assertEquals('http', $url->getProtocol());
-        $this->assertEquals('foo.com', $url->getHost());
+        $this->assertEquals('foo2.com', $url->getHost());
 
         $url = (new Url())->withHost('foo.com');
         $this->assertEquals('//foo.com', $url->__toString());
