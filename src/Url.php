@@ -2,9 +2,6 @@
 
 namespace Simplon\Url;
 
-/**
- * @package Simplon\Url
- */
 class Url
 {
     /**
@@ -208,7 +205,7 @@ class Url
     /**
      * @return string
      */
-    public function __toString(): string
+    public function toString(): string
     {
         $url = [];
 
@@ -254,6 +251,14 @@ class Url
         }
 
         return implode('', $url);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->toString();
     }
 
     /**

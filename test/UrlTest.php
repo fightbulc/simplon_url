@@ -125,7 +125,7 @@ class UrlTest extends TestCase
 
         $url = new Url('/');
         $this->assertEquals('/', $url->getPath());
-        $this->assertEquals('/', $url->__toString());
+        $this->assertEquals('/', $url->toString());
     }
 
     public function testQueryParams()
@@ -146,7 +146,7 @@ class UrlTest extends TestCase
     public function testProtocol()
     {
         $url = new Url('//lalala.foobar.com');
-        $this->assertEquals('//lalala.foobar.com', $url->__toString());
+        $this->assertEquals('//lalala.foobar.com', $url->toString());
         $this->assertNull($url->getProtocol());
         $this->assertEquals('lalala.foobar.com', $url->getHost());
     }
@@ -154,12 +154,12 @@ class UrlTest extends TestCase
     public function testSettingHost()
     {
         $url = (new Url())->withHost('http://foo2.com');
-        $this->assertEquals('http://foo2.com', $url->__toString());
+        $this->assertEquals('http://foo2.com', $url->toString());
         $this->assertEquals('http', $url->getProtocol());
         $this->assertEquals('foo2.com', $url->getHost());
 
         $url = (new Url())->withHost('foo.com');
-        $this->assertEquals('//foo.com', $url->__toString());
+        $this->assertEquals('//foo.com', $url->toString());
         $this->assertEquals('foo.com', $url->getHost());
     }
 }
