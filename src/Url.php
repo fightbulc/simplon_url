@@ -5,6 +5,10 @@ namespace Simplon\Url;
 class Url
 {
     /**
+     * @var callable
+     */
+    private static $protocolFetch;
+    /**
      * @var string
      */
     private $url;
@@ -14,13 +18,37 @@ class Url
     private $elements;
 
     /**
+     * @param callable $callback
+     */
+    public static function setFindProtocolCallback(callable $callback)
+    {
+        self::$protocolFetch = $callback;
+    }
+
+    /**
+     * @return string
+     */
+    private static function findCurrentProtocol(): string
+    {
+        $callback = self::$protocolFetch;
+
+        if (!$callback)
+        {
+            $callback = function ()
+            {
+                return ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+            };
+        }
+
+        return $callback();
+    }
+
+    /**
      * @return string
      */
     public static function getCurrentUrl(): string
     {
-        $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-
-        return $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        return self::findCurrentProtocol() . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
     /**
@@ -359,7 +387,7 @@ class Url
     }
 
     /**
-     * @param string $value
+     * @param string     $value
      * @param array|null $params
      *
      * @return Url
@@ -377,7 +405,7 @@ class Url
     }
 
     /**
-     * @param string $value
+     * @param string     $value
      * @param array|null $params
      *
      * @return Url
@@ -395,7 +423,7 @@ class Url
     }
 
     /**
-     * @param string $value
+     * @param string     $value
      * @param array|null $params
      *
      * @return Url
@@ -413,7 +441,7 @@ class Url
     }
 
     /**
-     * @param int $segment
+     * @param int    $segment
      * @param string $value
      *
      * @return Url
@@ -552,7 +580,7 @@ class Url
 
     /**
      * @param string $uri
-     * @param array $params
+     * @param array  $params
      *
      * @return string
      */
