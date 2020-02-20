@@ -15,9 +15,9 @@ install:
 
 script:
   - composer validate
-  - phpstan analyse src
-  - phpcs
-  - phpunit -c phpunit.xml
+  - vendor/bin/phpstan analyse src
+  - vendor/bin/phpcs
+  - vendor/bin/phpunit -c phpunit.xml
 
 notifications:
     on_success: never
