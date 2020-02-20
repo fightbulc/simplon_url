@@ -15,7 +15,7 @@ Straight forward URL parser and builder.
 
 # Requirements
 
-- PHP7.1+
+- PHP7.2+
 
 # Parsing
 

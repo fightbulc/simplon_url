@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\TestCase;
 use Simplon\Url\Url;
 
 class UrlTest extends TestCase
 {
-    const URL = 'http://jimmybuttler.dev/en/moom/dd21-mqs90-challenge-n/intro?token=GXVQUSNIN48B';
+    private const URL = 'http://jimmybuttler.dev/en/moom/dd21-mqs90-challenge-n/intro?token=GXVQUSNIN48B';
 
     public function testHttp()
     {

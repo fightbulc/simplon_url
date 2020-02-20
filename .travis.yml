@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 7.1
+  - 7.2
 
 matrix:
   allow_failures:
@@ -14,7 +14,10 @@ install:
   - travis_retry composer install --no-interaction --prefer-source
 
 script:
-  - phpunit -c phpunit.xml
+  - composer validate
+  - vendor/bin/phpstan analyse src
+  - vendor/bin/phpcs
+  - vendor/bin/phpunit -c phpunit.xml
 
 notifications:
     on_success: never
