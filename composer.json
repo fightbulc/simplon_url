@@ -20,10 +20,10 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.2"
+    "php": ">=7.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.0",
+    "phpunit/phpunit": "^6.0",
     "slevomat/coding-standard": "dev-master",
     "phpstan/extension-installer": "dev-master",
     "phpstan/phpstan": "^0.12.0@dev",
