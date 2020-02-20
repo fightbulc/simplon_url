@@ -13,7 +13,7 @@ class Url
      */
     private $url;
     /**
-     * @var array
+     * @var mixed[]
      */
     private $elements;
 
@@ -28,14 +28,12 @@ class Url
     /**
      * @return string
      */
-    private static function findCurrentProtocol(): string
+    private static function findCurrentProtocol() : string
     {
         $callback = self::$protocolFetch;
 
-        if (!$callback)
-        {
-            $callback = function ()
-            {
+        if (!$callback) {
+            $callback = function () {
                 return ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
             };
         }
@@ -46,7 +44,7 @@ class Url
     /**
      * @return string
      */
-    public static function getCurrentUrl(): string
+    public static function getCurrentUrl() : string
     {
         return self::findCurrentProtocol() . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
@@ -56,20 +54,18 @@ class Url
      */
     public function __construct(string $url = null)
     {
-        if ($url)
-        {
+        if ($url) {
             $this->url = $url;
             $this->parse();
         }
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
-    public function getProtocol(): ?string
+    public function getProtocol() : ?string
     {
-        if ($scheme = $this->getParsedElements('scheme'))
-        {
+        if ($scheme = $this->getParsedElements('scheme')) {
             return $scheme;
         }
 
@@ -79,7 +75,7 @@ class Url
     /**
      * @return string|null
      */
-    public function getHost(): ?string
+    public function getHost() : ?string
     {
         return $this->getParsedElements('host');
     }
@@ -87,12 +83,11 @@ class Url
     /**
      * @return string|null
      */
-    public function getSubDomain(): ?string
+    public function getSubDomain() : ?string
     {
         $parts = $this->getHostParts();
 
-        if ($parts)
-        {
+        if ($parts) {
             array_pop($parts);
             array_pop($parts);
 
@@ -105,12 +100,11 @@ class Url
     /**
      * @return string|null
      */
-    public function getDomain(): ?string
+    public function getDomain() : ?string
     {
         $parts = $this->getHostParts();
 
-        if ($parts)
-        {
+        if ($parts) {
             return array_slice($parts, -2, 1)[0];
         }
 
@@ -120,12 +114,11 @@ class Url
     /**
      * @return string|null
      */
-    public function getTopLevelDomain(): ?string
+    public function getTopLevelDomain() : ?string
     {
         $parts = $this->getHostParts();
 
-        if ($parts)
-        {
+        if ($parts) {
             return array_slice($parts, -1, 1)[0];
         }
 
@@ -135,7 +128,7 @@ class Url
     /**
      * @return string|null
      */
-    public function getPort(): ?string
+    public function getPort() : ?string
     {
         return $this->getParsedElements('port');
     }
@@ -143,7 +136,7 @@ class Url
     /**
      * @return string|null
      */
-    public function getUser(): ?string
+    public function getUser() : ?string
     {
         return $this->getParsedElements('user');
     }
@@ -151,7 +144,7 @@ class Url
     /**
      * @return string|null
      */
-    public function getPass(): ?string
+    public function getPass() : ?string
     {
         return $this->getParsedElements('pass');
     }
@@ -159,7 +152,7 @@ class Url
     /**
      * @return string
      */
-    public function getPath(): string
+    public function getPath() : string
     {
         $path = trim($this->getParsedElements('path'), '/');
 
@@ -171,20 +164,17 @@ class Url
      *
      * @return string|null
      */
-    public function getPathSegment(int $segment): ?string
+    public function getPathSegment(int $segment) : ?string
     {
-        if ($path = $this->getParsedElements('path'))
-        {
-            $pathSegments = explode('/', trim($path, '/'));
+        if ($path = $this->getParsedElements('path')) {
+            $pathSegments       = explode('/', trim($path, '/'));
             $pathSegementsCount = count($pathSegments);
 
-            if ($segment <= 0)
-            {
+            if ($segment <= 0) {
                 $segment = 1;
             }
 
-            if ($segment <= $pathSegementsCount && !empty($pathSegments[$segment - 1]))
-            {
+            if ($segment <= $pathSegementsCount && !empty($pathSegments[$segment - 1])) {
                 return $pathSegments[$segment - 1];
             }
         }
@@ -193,12 +183,11 @@ class Url
     }
 
     /**
-     * @return array|null
+     * @return mixed[]|null
      */
-    public function getAllQueryParams(): ?array
+    public function getAllQueryParams() : ?array
     {
-        if ($query = $this->getParsedElements('query'))
-        {
+        if ($query = $this->getParsedElements('query')) {
             parse_str($query, $params);
 
             return $params;
@@ -212,10 +201,9 @@ class Url
      *
      * @return string|null
      */
-    public function getQueryParam(string $key): ?string
+    public function getQueryParam(string $key) : ?string
     {
-        if (($params = $this->getAllQueryParams()) && isset($params[$key]))
-        {
+        if (($params = $this->getAllQueryParams()) && isset($params[$key])) {
             return $params[$key];
         }
 
@@ -225,7 +213,7 @@ class Url
     /**
      * @return string|null
      */
-    public function getFragment(): ?string
+    public function getFragment() : ?string
     {
         return $this->getParsedElements('fragment');
     }
@@ -233,48 +221,40 @@ class Url
     /**
      * @return string
      */
-    public function toString(): string
+    public function toString() : string
     {
         $url = [];
 
-        if ($this->getUser() && $this->getPass())
-        {
+        if ($this->getUser() && $this->getPass()) {
             $url[] = $this->getUser() . ':' . $this->getPass() . '@';
         }
 
-        if ($host = $this->getHost())
-        {
-            if ($this->getProtocol())
-            {
+        if ($host = $this->getHost()) {
+            if ($this->getProtocol()) {
                 $url[] = $this->getProtocol() . ':';
             }
 
             $url[] = '//' . $this->getHost();
         }
 
-        if ($port = $this->getPort())
-        {
+        if ($port = $this->getPort()) {
             $url[] = ':' . $port;
         }
 
-        if ($path = $this->getPath())
-        {
+        if ($path = $this->getPath()) {
             $path = trim($path, '/');
 
-            if ($this->getHost() === null || $path)
-            {
+            if ($this->getHost() === null || $path) {
                 $url[] = '/' . $path;
             }
         }
 
-        if ($params = $this->getAllQueryParams())
-        {
+        if ($params = $this->getAllQueryParams()) {
             ksort($params);
             $url[] = '?' . http_build_query($params);
         }
 
-        if ($fragment = $this->getFragment())
-        {
+        if ($fragment = $this->getFragment()) {
             $url[] = '#' . $fragment;
         }
 
@@ -284,7 +264,7 @@ class Url
     /**
      * @return string
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return $this->toString();
     }
@@ -294,7 +274,7 @@ class Url
      *
      * @return Url
      */
-    public function withProtocol(string $value): self
+    public function withProtocol(string $value) : self
     {
         return $this->setElement('scheme', $value);
     }
@@ -304,10 +284,9 @@ class Url
      *
      * @return Url
      */
-    public function withHost(string $value): self
+    public function withHost(string $value) : self
     {
-        if (strpos($value, '://'))
-        {
+        if (strpos($value, '://')) {
             list($protocol, $value) = explode('://', $value);
             $this->withProtocol($protocol);
         }
@@ -320,12 +299,11 @@ class Url
      *
      * @return Url
      */
-    public function withSubDomain(string $value): self
+    public function withSubDomain(string $value) : self
     {
         $host = $value . '.' . $this->getHost();
 
-        if ($subDomain = $this->getSubDomain())
-        {
+        if ($subDomain = $this->getSubDomain()) {
             $host = str_replace($this->getSubDomain(), $value, $this->getHost());
         }
 
@@ -337,7 +315,7 @@ class Url
      *
      * @return Url
      */
-    public function withDomain(string $value): self
+    public function withDomain(string $value) : self
     {
         $host = str_replace($this->getDomain(), $value, $this->getHost());
 
@@ -349,7 +327,7 @@ class Url
      *
      * @return Url
      */
-    public function withTopLevelDomain(string $value): self
+    public function withTopLevelDomain(string $value) : self
     {
         $host = str_replace($this->getTopLevelDomain(), $value, $this->getHost());
 
@@ -361,7 +339,7 @@ class Url
      *
      * @return Url
      */
-    public function withPort(string $value): self
+    public function withPort(string $value) : self
     {
         return $this->setElement('port', $value);
     }
@@ -371,7 +349,7 @@ class Url
      *
      * @return Url
      */
-    public function withUser(string $value): self
+    public function withUser(string $value) : self
     {
         return $this->setElement('user', $value);
     }
@@ -381,23 +359,22 @@ class Url
      *
      * @return Url
      */
-    public function withPass(string $value): self
+    public function withPass(string $value) : self
     {
         return $this->setElement('pass', $value);
     }
 
     /**
-     * @param string     $value
-     * @param array|null $params
+     * @param string $value
+     * @param mixed[]|null $params
      *
      * @return Url
      */
-    public function withPath(string $value, ?array $params = null): self
+    public function withPath(string $value, ?array $params = null) : self
     {
         $path = rtrim($value, '/');
 
-        if ($params)
-        {
+        if ($params) {
             $path = $this->replacePlaceholders($path, $params);
         }
 
@@ -405,17 +382,16 @@ class Url
     }
 
     /**
-     * @param string     $value
-     * @param array|null $params
+     * @param string $value
+     * @param mixed[]|null $params
      *
      * @return Url
      */
-    public function withPrefixPath(string $value, ?array $params = null): self
+    public function withPrefixPath(string $value, ?array $params = null) : self
     {
         $path = rtrim($value, '/') . '/' . trim($this->getPath(), '/');
 
-        if ($params)
-        {
+        if ($params) {
             $path = $this->replacePlaceholders($path, $params);
         }
 
@@ -423,17 +399,16 @@ class Url
     }
 
     /**
-     * @param string     $value
-     * @param array|null $params
+     * @param string $value
+     * @param mixed[]|null $params
      *
      * @return Url
      */
-    public function withTrailPath(string $value, ?array $params = null): self
+    public function withTrailPath(string $value, ?array $params = null) : self
     {
         $path = rtrim($this->getPath(), '/') . '/' . trim($value, '/');
 
-        if ($params)
-        {
+        if ($params) {
             $path = $this->replacePlaceholders($path, $params);
         }
 
@@ -441,28 +416,25 @@ class Url
     }
 
     /**
-     * @param int    $segment
+     * @param int $segment
      * @param string $value
      *
      * @return Url
      */
-    public function withPathSegment(int $segment, string $value): self
+    public function withPathSegment(int $segment, string $value) : self
     {
         // fallback
         $pathSegments = [$value];
 
-        if ($path = $this->getPath())
-        {
-            $pathSegments = explode('/', rtrim($this->getPath(), '/'));
+        if ($path = $this->getPath()) {
+            $pathSegments       = explode('/', rtrim($this->getPath(), '/'));
             $pathSegementsCount = count($pathSegments);
 
-            if ($segment <= 0)
-            {
+            if ($segment <= 0) {
                 $segment = 1;
             }
 
-            if ($segment > $pathSegementsCount)
-            {
+            if ($segment > $pathSegementsCount) {
                 $segment = $pathSegementsCount;
             }
 
@@ -474,11 +446,11 @@ class Url
 
     /**
      * @param string $key
-     * @param string $value
+     * @param mixed $value
      *
      * @return Url
      */
-    public function withQueryParam(string $key, $value): self
+    public function withQueryParam(string $key, $value) : self
     {
         $params = $this->getAllQueryParams() ?? [];
         $params = array_replace_recursive($params, [$key => $value]);
@@ -487,14 +459,13 @@ class Url
     }
 
     /**
-     * @param array $params
+     * @param mixed[] $params
      *
      * @return Url
      */
-    public function withQueryParams(array $params): self
+    public function withQueryParams(array $params) : self
     {
-        foreach ($params as $key => $value)
-        {
+        foreach ($params as $key => $value) {
             $this->withQueryParam($key, $value);
         }
 
@@ -506,7 +477,7 @@ class Url
      *
      * @return Url
      */
-    public function withFragment(string $value): self
+    public function withFragment(string $value) : self
     {
         return $this->setElement('fragment', trim($value, '/'));
     }
@@ -514,7 +485,7 @@ class Url
     /**
      * @return Url
      */
-    public function withoutHost(): self
+    public function withoutHost() : self
     {
         return $this->setElement('host', '');
     }
@@ -522,12 +493,11 @@ class Url
     /**
      * @return Url
      */
-    public function withoutSubDomain(): self
+    public function withoutSubDomain() : self
     {
         $host = $this->getHost();
 
-        if ($this->getSubDomain())
-        {
+        if ($this->getSubDomain()) {
             $host = str_replace($this->getSubDomain() . '.', '', $host);
         }
 
@@ -537,7 +507,7 @@ class Url
     /**
      * @return Url
      */
-    public function withoutPath(): self
+    public function withoutPath() : self
     {
         return $this->setElement('path', '');
     }
@@ -545,7 +515,7 @@ class Url
     /**
      * @return Url
      */
-    public function withoutFragment(): self
+    public function withoutFragment() : self
     {
         return $this->setElement('fragment', '');
     }
@@ -553,7 +523,7 @@ class Url
     /**
      * @return Url
      */
-    public function withoutAllQueryParams(): self
+    public function withoutAllQueryParams() : self
     {
         return $this->setElement('query', '');
     }
@@ -563,12 +533,10 @@ class Url
      *
      * @return Url
      */
-    public function withoutQueryParam(string $key): self
+    public function withoutQueryParam(string $key) : self
     {
-        if ($params = $this->getAllQueryParams())
-        {
-            if (isset($params[$key]))
-            {
+        if ($params = $this->getAllQueryParams()) {
+            if (isset($params[$key])) {
                 unset($params[$key]);
             }
 
@@ -580,14 +548,13 @@ class Url
 
     /**
      * @param string $uri
-     * @param array  $params
+     * @param mixed[] $params
      *
      * @return string
      */
-    private function replacePlaceholders(string $uri, array $params = []): string
+    private function replacePlaceholders(string $uri, array $params = []) : string
     {
-        foreach ($params as $key => $val)
-        {
+        foreach ($params as $key => $val) {
             $uri = str_replace('{' . $key . '}', $val, $uri);
         }
 
@@ -600,7 +567,7 @@ class Url
      *
      * @return Url
      */
-    private function setElement(string $key, string $value): self
+    private function setElement(string $key, string $value) : self
     {
         $this->elements[$key] = $value;
 
@@ -610,10 +577,9 @@ class Url
     /**
      * @return array|null
      */
-    private function getHostParts(): ?array
+    private function getHostParts() : ?array
     {
-        if ($this->getHost())
-        {
+        if ($this->getHost()) {
             return explode('.', $this->getHost());
         }
 
@@ -627,8 +593,7 @@ class Url
      */
     private function getParsedElements(string $elm)
     {
-        if (($elements = $this->parse()) && !empty($elements[$elm]))
-        {
+        if (($elements = $this->parse()) && !empty($elements[$elm])) {
             return $elements[$elm];
         }
 
@@ -636,12 +601,11 @@ class Url
     }
 
     /**
-     * @return array|mixed
+     * @return mixed[]|mixed
      */
     private function parse()
     {
-        if (!$this->elements)
-        {
+        if (!$this->elements) {
             $this->elements = parse_url($this->url);
         }
 
