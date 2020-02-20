@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Simplon\Url;
 
+use Closure;
 use function array_pop;
 use function array_replace_recursive;
 use function array_slice;
@@ -11,6 +12,7 @@ use function count;
 use function explode;
 use function http_build_query;
 use function implode;
+use function is_array;
 use function ksort;
 use function parse_str;
 use function parse_url;
@@ -24,9 +26,9 @@ class Url
     /** @var callable */
     private static $protocolFetch;
     /** @var string|null */
-    private $url;
+    private $url = null;
     /** @var mixed[]|null */
-    private $elements;
+    private $elements = null;
 
     public static function setFindProtocolCallback(callable $callback) : void
     {
@@ -37,9 +39,15 @@ class Url
     {
         $callback = self::$protocolFetch;
 
-        if (!$callback instanceof \Closure) {
+        if (! $callback instanceof Closure) {
             $callback = static function () {
-                return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443 ? 'https://' : 'http://';
+                $protocol = 'http://';
+
+                if ((! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443) {
+                    $protocol = 'https://';
+                }
+
+                return $protocol;
             };
         }
 
@@ -53,7 +61,7 @@ class Url
 
     public function __construct(?string $url = null)
     {
-        if (!$url) {
+        if (! $url) {
             return;
         }
 
@@ -147,7 +155,7 @@ class Url
                 $segment = 1;
             }
 
-            if ($segment <= $pathSegementsCount && !empty($pathSegments[$segment - 1])) {
+            if ($segment <= $pathSegementsCount && ! empty($pathSegments[$segment - 1])) {
                 return $pathSegments[$segment - 1];
             }
         }
@@ -540,7 +548,7 @@ class Url
     {
         $elements = $this->parse();
 
-        if ($elements && !empty($elements[$elm])) {
+        if ($elements && ! empty($elements[$elm])) {
             return $elements[$elm];
         }
 
@@ -552,7 +560,7 @@ class Url
      */
     private function parse() : ?array
     {
-        if (!$this->elements && $this->url) {
+        if (! $this->elements && $this->url) {
             $parseResponse = parse_url($this->url);
 
             if (is_array($parseResponse)) {

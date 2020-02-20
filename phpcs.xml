@@ -6,7 +6,7 @@
 
     <arg name="colors" />
     <arg name="cache" />
-    <config name="testVersion" value="7.1-"/>
+    <config name="phpVersion" value="7"/>
     <config name="installed_paths" value="vendor/slevomat/coding-standard/" />
 
     <file>src/</file>
@@ -374,16 +374,17 @@
             </property>
         </properties>
     </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
-        <properties>
-            <property name="traversableTypeHints" type="array">
-                <element value="Traversable"/>
-                <element value="Iterator"/>
-                <element value="IteratorAggregate"/>
-                <element value="Doctrine\Common\Collections\Collection"/>
-            </property>
-        </properties>
-    </rule>
+<!-- php 7.4 -->
+<!--    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">-->
+<!--        <properties>-->
+<!--            <property name="traversableTypeHints" type="array">-->
+<!--                <element value="Traversable"/>-->
+<!--                <element value="Iterator"/>-->
+<!--                <element value="IteratorAggregate"/>-->
+<!--                <element value="Doctrine\Common\Collections\Collection"/>-->
+<!--            </property>-->
+<!--        </properties>-->
+<!--    </rule>-->
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
         <properties>
             <property name="traversableTypeHints" type="array">
