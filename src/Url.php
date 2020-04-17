@@ -119,7 +119,7 @@ class Url
         return null;
     }
 
-    public function getPort() : ?string
+    public function getPort() : ?int
     {
         return $this->getParsedElements('port');
     }
